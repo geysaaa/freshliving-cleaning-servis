@@ -2,12 +2,17 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Nota Pesanan #{{ $pesanan->id }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
         body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; }
         .nota-box { max-width: 650px; margin: 2rem auto; background: #fff; border-radius: 12px; padding: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        @media (max-width: 576px) {
+            .nota-box { margin: 0; border-radius: 0; padding: 1.25rem; }
+            .nota-box table { font-size: 13px; }
+        }
         @media print {
             body { background: #fff; }
             .no-print { display: none !important; }
@@ -25,7 +30,7 @@
     <div class="nota-box">
         <div class="d-flex justify-content-between align-items-start mb-4 pb-3 border-bottom">
             <div>
-                <h4 class="fw-bold mb-0 text-primary"><i class="bi bi-droplet-fill"></i> FreshLiving Cleaning Services</h4>
+                <h4 class="fw-bold mb-0 text-primary"><i class="bi bi-droplet-fill"></i> FreshLiving</h4>
                 <small class="text-muted">Jasa Cleaning Service Panggilan</small>
             </div>
             <div class="text-end">
@@ -49,7 +54,7 @@
             </div>
             <div class="col-6 mt-2 text-end">
                 <small class="text-muted d-block">Email</small>
-                <div class="fw-medium">{{ $pesanan->pelanggan->email ?? '-' }}</div>
+                <div class="fw-medium" style="word-break: break-all;">{{ $pesanan->pelanggan->email ?? '-' }}</div>
             </div>
         </div>
 
@@ -88,37 +93,39 @@
         <hr>
 
         <h6 class="fw-bold mb-3">Detail Pembayaran</h6>
-        <table class="table table-borderless mb-0">
-            <thead>
-                <tr class="border-bottom">
-                    <th>Keterangan</th>
-                    <th class="text-center">Jumlah</th>
-                    <th class="text-end">Satuan</th>
-                    <th class="text-end">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ $pesanan->paketLayanan->nama_paket }} - {{ $pesanan->jadwal->format('d M Y') }}</td>
-                    <td class="text-center">1</td>
-                    <td class="text-end">Rp{{ number_format($pesanan->total_tagihan, 0, ',', '.') }}</td>
-                    <td class="text-end">Rp{{ number_format($pesanan->total_tagihan, 0, ',', '.') }}</td>
-                </tr>
-                <tr class="border-top">
-                    <td colspan="3" class="text-end fw-bold pt-3">Total Dibayar</td>
-                    <td class="text-end fw-bold pt-3">Rp{{ number_format($pesanan->total_tagihan, 0, ',', '.') }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+                <thead>
+                    <tr class="border-bottom">
+                        <th>Keterangan</th>
+                        <th class="text-center">Jumlah</th>
+                        <th class="text-end">Satuan</th>
+                        <th class="text-end">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ $pesanan->paketLayanan->nama_paket }} - {{ $pesanan->jadwal->format('d M Y') }}</td>
+                        <td class="text-center">1</td>
+                        <td class="text-end">Rp{{ number_format($pesanan->total_tagihan, 0, ',', '.') }}</td>
+                        <td class="text-end">Rp{{ number_format($pesanan->total_tagihan, 0, ',', '.') }}</td>
+                    </tr>
+                    <tr class="border-top">
+                        <td colspan="3" class="text-end fw-bold pt-3">Total Dibayar</td>
+                        <td class="text-end fw-bold pt-3">Rp{{ number_format($pesanan->total_tagihan, 0, ',', '.') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <div class="mt-4 pt-3 border-top text-end">
             <small class="text-muted d-block">Jakarta, {{ now()->translatedFormat('d F Y') }}</small>
             <p class="mb-0 mt-1">Hormat Kami,</p>
-            <p class="fw-bold mt-4">PT FreshLiving Cleaning Services Indonesia</p>
+            <p class="fw-bold mt-4">PT FreshLiving Indonesia</p>
         </div>
 
         <div class="text-center mt-4 pt-3 border-top">
-            <small class="text-muted">Terima kasih telah memesan di FreshLiving Cleaning Services. Dokumen ini adalah bukti pembayaran resmi yang diterbitkan secara elektronik.</small>
+            <small class="text-muted">Terima kasih telah memesan di FreshLiving. Dokumen ini adalah bukti pembayaran resmi yang diterbitkan secara elektronik.</small>
         </div>
     </div>
 
