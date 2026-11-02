@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'FreshLiving Cleaning Services')</title>
+    <title>@yield('title', 'FreshLiving')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -33,6 +33,24 @@
                 display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1025;
             }
         }
+
+        /* ===== Perbaikan tampilan HP ===== */
+        body { overflow-x: hidden; }
+        img { max-width: 100%; height: auto; }
+
+        @media (max-width: 768px) {
+            .main-content h3 { font-size: 1.3rem; }
+
+            /* tabel boleh digeser ke samping, tidak terpotong */
+            .main-content .overflow-hidden { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+            .main-content .overflow-hidden > table { min-width: 620px; }
+
+            /* form filter turun ke baris baru kalau tidak muat */
+            .main-content form.d-flex { flex-wrap: wrap; }
+            .main-content form.d-flex .form-control,
+            .main-content form.d-flex .form-select,
+            .main-content form.d-flex .input-group { flex: 1 1 140px; max-width: 100% !important; min-width: 0; }
+        }
     </style>
 </head>
 <body>
@@ -41,19 +59,19 @@
     <button class="btn btn-sm btn-outline-light" onclick="document.getElementById('sidebar').classList.toggle('show'); document.getElementById('overlay').classList.toggle('show');">
         <i class="bi bi-list fs-5"></i>
     </button>
-    <span class="fw-semibold"><i class="bi bi-droplet-fill"></i> FreshLiving Cleaning Services</span>
+    <span class="fw-semibold"><i class="bi bi-droplet-fill"></i> FreshLiving</span>
 </div>
 
 <div class="sidebar-overlay" id="overlay" onclick="document.getElementById('sidebar').classList.remove('show'); this.classList.remove('show');"></div>
 
 <div class="sidebar" id="sidebar">
     <div class="brand">
-    <i class="bi bi-droplet-fill fs-5"></i>
-    <div style="line-height:1.15;">
-        FreshLiving
-        <div style="font-size:10px; font-weight:400; opacity:0.7;">Cleaning Services</div>
+        <i class="bi bi-droplet-fill fs-5"></i>
+        <div style="line-height:1.15;">
+            FreshLiving
+            <div style="font-size:10px; font-weight:400; opacity:0.7;">Cleaning Services</div>
+        </div>
     </div>
-</div>
     <nav class="nav flex-column mt-2">
         <a href="{{ route('pesanan.katalog') }}" class="nav-link {{ request()->routeIs('pesanan.katalog') || request()->routeIs('pesanan.paketDetail') ? 'active' : '' }}"><i class="bi bi-grid"></i> Katalog</a>
         <a href="{{ route('pesanan.riwayat') }}" class="nav-link {{ request()->routeIs('pesanan.riwayat') || request()->routeIs('pesanan.detail') ? 'active' : '' }}"><i class="bi bi-clock-history"></i> Riwayat</a>
