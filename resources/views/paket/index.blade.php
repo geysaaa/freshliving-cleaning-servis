@@ -3,14 +3,14 @@
 @section('title', 'Data Paket Layanan')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-4">
-    <div class="d-flex align-items-center gap-2">
-        <a href="javascript:history.back()" class="text-decoration-none text-dark"><i class="bi bi-arrow-left fs-4"></i></a>
-        <div>
-            <h3 class="mb-1">Data Paket Layanan</h3>
-            <p class="text-muted mb-0">Total {{ $paketLayanans->total() }} paket terdaftar</p>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div class="d-flex align-items-center gap-2">
+            <a href="javascript:history.back()" class="text-decoration-none text-dark"><i class="bi bi-arrow-left fs-4"></i></a>
+            <div>
+                <h3 class="mb-1">Data Paket Layanan</h3>
+                <p class="text-muted mb-0">Total {{ $paketLayanans->total() }} paket terdaftar</p>
+            </div>
         </div>
-    </div>
         <a href="{{ route('paket.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Tambah Paket</a>
     </div>
 
@@ -22,7 +22,8 @@
         </div>
     </form>
 
-    <div class="bg-white rounded-3 shadow-sm overflow-hidden">
+    {{-- TAMPILAN LAPTOP: tabel --}}
+    <div class="bg-white rounded-4 shadow-sm overflow-hidden d-none d-md-block">
         <table class="table table-hover mb-0 align-middle">
             <thead style="background:#f1f3f5;">
                 <tr>
@@ -69,6 +70,49 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    {{-- TAMPILAN HP: kartu --}}
+    <div class="d-md-none">
+        @forelse ($paketLayanans as $paket)
+            <div class="bg-white rounded-4 shadow-sm p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                    <div class="d-flex align-items-center gap-2" style="min-width:0;">
+                        <span class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:40px;height:40px;">
+                            <i class="bi bi-box-seam"></i>
+                        </span>
+                        <div style="min-width:0;">
+                            <div class="fw-semibold text-break">{{ $paket->nama_paket }}</div>
+                            <small class="text-muted">{{ Str::limit($paket->deskripsi, 40) }}</small>
+                        </div>
+                    </div>
+                    @if ($paket->aktif)
+                        <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">Aktif</span>
+                    @else
+                        <span class="badge rounded-pill bg-secondary-subtle text-secondary px-3 py-2">Nonaktif</span>
+                    @endif
+                </div>
+
+                <div class="d-flex justify-content-between align-items-end mt-3 pt-3 border-top">
+                    <div>
+                        <div class="fw-bold text-primary">Rp{{ number_format($paket->harga, 0, ',', '.') }}</div>
+                        <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ $paket->estimasi_durasi_menit }} menit</small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('paket.edit', $paket) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil me-1"></i>Edit</a>
+                        <form action="{{ route('paket.destroy', $paket) }}" method="POST" onsubmit="return confirm('Yakin hapus paket ini?')">
+                            @csrf @method('DELETE')
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="bg-white rounded-4 shadow-sm text-center text-muted py-5">
+                <i class="bi bi-box-seam fs-1 d-block mb-2 opacity-25"></i>
+                Belum ada paket layanan.
+            </div>
+        @endforelse
     </div>
 
     <div class="mt-3">{{ $paketLayanans->links('pagination::bootstrap-5') }}</div>
