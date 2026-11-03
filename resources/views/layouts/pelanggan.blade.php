@@ -35,22 +35,30 @@
         }
 
         /* ===== Perbaikan tampilan HP ===== */
-        body { overflow-x: hidden; }
-        img { max-width: 100%; height: auto; }
+body { overflow-x: hidden; }
+img { max-width: 100%; height: auto; }
 
-        @media (max-width: 768px) {
-            .main-content h3 { font-size: 1.3rem; }
+@media (max-width: 768px) {
+    .main-content h3 { font-size: 1.3rem; }
 
-            /* tabel boleh digeser ke samping, tidak terpotong */
-            .main-content .overflow-hidden { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
-            .main-content .overflow-hidden > table { min-width: 620px; }
+    /* tabel boleh digeser ke samping, tidak terpotong */
+    .main-content .overflow-hidden { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+    .main-content .overflow-hidden > table { min-width: 620px; }
 
-            /* form filter turun ke baris baru kalau tidak muat */
-            .main-content form.d-flex { flex-wrap: wrap; }
-            .main-content form.d-flex .form-control,
-            .main-content form.d-flex .form-select,
-            .main-content form.d-flex .input-group { flex: 1 1 140px; max-width: 100% !important; min-width: 0; }
-        }
+    /* kotak pencarian: ikon dan kolom ketik tetap satu baris */
+    .main-content .input-group { flex-wrap: nowrap; }
+    .main-content .input-group > .form-control { min-width: 0; }
+
+    /* form filter biasa: boleh turun ke baris baru kalau tidak muat */
+    .main-content form.d-flex { flex-wrap: wrap; }
+    .main-content form.d-flex > .form-control,
+    .main-content form.d-flex > .form-select { flex: 1 1 140px; min-width: 0; max-width: 100% !important; }
+
+    /* form filter tanggal: selalu satu baris, tombol Filter tidak turun */
+    .main-content form.d-flex:has(input[type="date"]) { width: 100%; flex-wrap: nowrap; }
+    .main-content form.d-flex:has(input[type="date"]) > .form-control { flex: 1 1 0; min-width: 0; padding-left: .5rem; padding-right: .25rem; font-size: 13px; }
+    .main-content form.d-flex:has(input[type="date"]) > .btn { flex: 0 0 auto; white-space: nowrap; }
+}
     </style>
 </head>
 <body>
