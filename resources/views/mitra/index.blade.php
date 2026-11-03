@@ -12,11 +12,11 @@
     </div>
 
     <form method="GET" class="d-flex gap-2 mb-3 flex-wrap">
-        <div class="input-group" style="max-width:350px;">
+        <div class="input-group" style="flex:1 1 240px; max-width:350px;">
             <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
             <input type="text" name="cari" class="form-control border-start-0" placeholder="Cari nama atau email..." value="{{ request('cari') }}">
         </div>
-        <select name="status" class="form-select" style="max-width:200px;" onchange="this.form.submit()">
+        <select name="status" class="form-select" style="flex:1 1 160px; max-width:200px;" onchange="this.form.submit()">
             <option value="">Semua Status</option>
             <option value="aktif" {{ request('status') === 'aktif' ? 'selected' : '' }}>Aktif</option>
             <option value="menunggu_verifikasi" {{ request('status') === 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
@@ -25,7 +25,8 @@
         <button class="btn btn-outline-secondary">Cari</button>
     </form>
 
-    <div class="bg-white rounded-4 shadow-sm overflow-hidden">
+    {{-- TAMPILAN LAPTOP: tabel --}}
+    <div class="bg-white rounded-4 shadow-sm overflow-hidden d-none d-md-block">
         <table class="table table-hover mb-0 align-middle">
             <thead style="background:#f8f9fb;">
                 <tr>
@@ -92,6 +93,77 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    {{-- TAMPILAN HP: kartu --}}
+    <div class="d-md-none">
+        @forelse ($mitras as $mitra)
+            <div class="bg-white rounded-4 shadow-sm p-3 mb-3">
+                <a href="{{ route('mitra.detail', $mitra) }}" class="d-flex align-items-center gap-2 text-decoration-none text-dark">
+                    <span class="rounded-circle d-flex align-items-center justify-content-center fw-semibold flex-shrink-0" style="width:42px;height:42px; background:rgba(13,110,253,0.1); color:#0d6efd;">
+                        {{ strtoupper(substr($mitra->name, 0, 1)) }}
+                    </span>
+                    <div style="min-width:0;">
+                        <div class="fw-semibold text-break">{{ $mitra->name }}</div>
+                        <small class="text-muted text-break">{{ $mitra->email }}</small>
+                    </div>
+                </a>
+
+                <div class="mt-2">
+                    @if ($mitra->status_mitra === 'aktif')
+                        <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2"><i class="bi bi-check-circle-fill me-1" style="font-size:10px;"></i>Aktif</span>
+                    @elseif ($mitra->status_mitra === 'ditolak')
+                        <span class="badge rounded-pill bg-danger-subtle text-danger px-3 py-2"><i class="bi bi-x-circle-fill me-1" style="font-size:10px;"></i>Ditolak</span>
+                    @else
+                        <span class="badge rounded-pill bg-warning-subtle text-warning px-3 py-2"><i class="bi bi-clock-fill me-1" style="font-size:10px;"></i>Menunggu Verifikasi</span>
+                    @endif
+                </div>
+
+                <div class="small mt-3 pt-2 border-top">
+                    <div class="d-flex justify-content-between gap-3 py-1">
+                        <span class="text-muted">Area</span>
+                        <span class="text-end">{{ $mitra->area_layanan ?? '-' }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between gap-3 py-1">
+                        <span class="text-muted">Keahlian</span>
+                        <span class="text-end">{{ $mitra->keahlian ?? '-' }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between gap-3 py-1">
+                        <span class="text-muted">Rating</span>
+                        <span>
+                            @if ($mitra->jumlah_rating > 0)
+                                <i class="bi bi-star-fill text-warning"></i> {{ number_format($mitra->rata_rating, 1) }}
+                                <span class="text-muted">({{ $mitra->jumlah_rating }})</span>
+                            @else
+                                <span class="text-muted">Belum ada</span>
+                            @endif
+                        </span>
+                    </div>
+                </div>
+
+                @if ($mitra->status_mitra !== 'aktif' || $mitra->status_mitra !== 'ditolak')
+                    <div class="d-flex gap-2 mt-3">
+                        @if ($mitra->status_mitra !== 'aktif')
+                            <form action="{{ route('mitra.verify', $mitra) }}" method="POST" class="flex-fill">
+                                @csrf
+                                <button class="btn btn-success btn-sm w-100"><i class="bi bi-check-lg me-1"></i>Setujui</button>
+                            </form>
+                        @endif
+                        @if ($mitra->status_mitra !== 'ditolak')
+                            <form action="{{ route('mitra.reject', $mitra) }}" method="POST" class="flex-fill">
+                                @csrf
+                                <button class="btn btn-outline-danger btn-sm w-100"><i class="bi bi-x-lg me-1"></i>Tolak</button>
+                            </form>
+                        @endif
+                    </div>
+                @endif
+            </div>
+        @empty
+            <div class="bg-white rounded-4 shadow-sm text-center text-muted py-5">
+                <i class="bi bi-people fs-1 d-block mb-2 opacity-25"></i>
+                Belum ada mitra terdaftar.
+            </div>
+        @endforelse
     </div>
 
     <div class="mt-3">{{ $mitras->links('pagination::bootstrap-5') }}</div>
