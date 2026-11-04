@@ -3,15 +3,13 @@
 @section('title', 'Data Paket Layanan')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-        <div class="d-flex align-items-center gap-2">
-            <a href="javascript:history.back()" class="text-decoration-none text-dark"><i class="bi bi-arrow-left fs-4"></i></a>
-            <div>
-                <h3 class="mb-1">Data Paket Layanan</h3>
-                <p class="text-muted mb-0">Total {{ $paketLayanans->total() }} paket terdaftar</p>
-            </div>
-        </div>
-        <a href="{{ route('paket.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Tambah Paket</a>
+    <div class="d-flex align-items-center gap-2 mb-1">
+        <a href="javascript:history.back()" class="text-decoration-none text-dark"><i class="bi bi-arrow-left fs-4"></i></a>
+        <h3 class="mb-0">Data Paket Layanan</h3>
+    </div>
+    <div class="d-flex justify-content-between align-items-center gap-2 mb-4">
+        <p class="text-muted mb-0">Total {{ $paketLayanans->total() }} paket terdaftar</p>
+        <a href="{{ route('paket.create') }}" class="btn btn-primary btn-sm text-nowrap"><i class="bi bi-plus-lg me-1"></i>Tambah Paket</a>
     </div>
 
     <form method="GET" class="mb-3">
