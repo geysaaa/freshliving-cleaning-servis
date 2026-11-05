@@ -7,7 +7,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Komplain extends Model
 {
-    protected $fillable = ['pesanan_id', 'pelanggan_id', 'deskripsi', 'foto_bukti', 'status', 'tanggapan_admin'];
+    public const JENIS = [
+        'pembayaran' => 'Pembayaran',
+        'kualitas' => 'Kualitas pekerjaan',
+        'keterlambatan' => 'Keterlambatan',
+        'perilaku_mitra' => 'Perilaku mitra',
+        'lainnya' => 'Lainnya',
+    ];
+
+    protected $fillable = [
+        'pesanan_id',
+        'pelanggan_id',
+        'jenis_masalah',
+        'deskripsi',
+        'foto_bukti',
+        'status',
+        'tanggapan_admin',
+    ];
 
     public function pesanan(): BelongsTo
     {
