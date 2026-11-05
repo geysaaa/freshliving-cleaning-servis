@@ -1,19 +1,19 @@
 <?php
 
+use App\Http\Controllers\ChecklistController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JadwalMitraController;
+use App\Http\Controllers\KomplainController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\MitraController;
 use App\Http\Controllers\PaketLayananController;
+use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\MitraController;
-use App\Http\Controllers\TransaksiController;
-use App\Http\Controllers\LaporanController;
-use App\Http\Controllers\JadwalMitraController;
 use App\Http\Controllers\RatingController;
-use App\Http\Controllers\KomplainController;
-use App\Http\Controllers\PembayaranController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
-// --- Route bawaan Laravel/Breeze ---
 Route::get('/', function () {
     return view('welcome');
 });
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // ==========================================
-// ROUTE KHUSUS ADMIN
+// ADMIN
 // ==========================================
 Route::middleware(['auth', 'role:admin'])->prefix('paket-layanan')->name('paket.')->group(function () {
     Route::get('/', [PaketLayananController::class, 'index'])->name('index');
@@ -58,7 +58,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 // ==========================================
-// ROUTE KHUSUS MITRA
+// MITRA
 // ==========================================
 Route::middleware(['auth', 'role:mitra'])->group(function () {
     Route::get('/jadwal-mitra', [JadwalMitraController::class, 'index'])->name('mitra.jadwal');
@@ -68,23 +68,25 @@ Route::middleware(['auth', 'role:mitra'])->group(function () {
     Route::post('/pesanan/{pesanan}/accept', [PesananController::class, 'accept'])->name('pesanan.accept');
     Route::post('/pesanan/{pesanan}/reject', [PesananController::class, 'reject'])->name('pesanan.reject');
     Route::get('/riwayat-mitra', [PesananController::class, 'riwayatMitra'])->name('mitra.riwayat');
+    Route::post('/pesanan/{pesanan}/konfirmasi-cod', [PembayaranController::class, 'konfirmasiCod'])->name('pembayaran.konfirmasiCod');
+    Route::post('/pesanan/{pesanan}/checklist', [ChecklistController::class, 'update'])->name('pesanan.checklist');
 });
 
 // ==========================================
-// ROUTE KHUSUS PELANGGAN
+// PELANGGAN
 // ==========================================
 Route::middleware(['auth', 'role:pelanggan'])->group(function () {
     Route::get('/katalog', [PesananController::class, 'katalog'])->name('pesanan.katalog');
+    Route::get('/paket/{paket}/detail', [PaketLayananController::class, 'show'])->name('pesanan.paketDetail');
     Route::get('/pesanan/{pesanan}/rating', [RatingController::class, 'create'])->name('rating.create');
     Route::post('/pesanan/{pesanan}/rating', [RatingController::class, 'store'])->name('rating.store');
     Route::get('/pesanan/{pesanan}/komplain', [KomplainController::class, 'create'])->name('komplain.create');
     Route::post('/pesanan/{pesanan}/komplain', [KomplainController::class, 'store'])->name('komplain.store');
-        Route::post('/pesanan/{pesanan}/batalkan', [PesananController::class, 'batalkan'])->name('pesanan.batalkan');
-    Route::get('/paket/{paket}/detail', [PaketLayananController::class, 'show'])->name('pesanan.paketDetail');
+    Route::post('/pesanan/{pesanan}/batalkan', [PesananController::class, 'batalkan'])->name('pesanan.batalkan');
 });
 
 // ==========================================
-// ROUTE UNTUK SEMUA ROLE (asal sudah login)
+// SEMUA ROLE (asal sudah login)
 // ==========================================
 Route::middleware(['auth'])->prefix('pesanan')->name('pesanan.')->group(function () {
     Route::get('/buat', [PesananController::class, 'create'])->name('create');
@@ -99,7 +101,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pesanan/{pesanan}/bayar', [PembayaranController::class, 'store'])->name('pembayaran.store');
     Route::get('/pesanan/{pesanan}/nota', [PembayaranController::class, 'nota'])->name('pembayaran.nota');
 });
-
-Route::middleware(['auth', 'role:mitra'])->post('/pesanan/{pesanan}/konfirmasi-cod', [PembayaranController::class, 'konfirmasiCod'])->name('pembayaran.konfirmasiCod');
 
 require __DIR__.'/auth.php';
