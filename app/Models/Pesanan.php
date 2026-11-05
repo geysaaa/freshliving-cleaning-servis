@@ -22,10 +22,12 @@ class Pesanan extends Model
         'status_pembayaran',
         'bukti_transfer',
         'metode_pembayaran',
+        'checklist_selesai',
     ];
 
     protected $casts = [
         'jadwal' => 'datetime',
+        'checklist_selesai' => 'array',
     ];
 
     public function pelanggan(): BelongsTo
