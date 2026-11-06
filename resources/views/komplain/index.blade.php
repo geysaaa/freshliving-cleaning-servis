@@ -14,13 +14,13 @@
     @endphp
 
     <form method="GET" class="row g-2 mb-3">
-        <div class="col-12 col-md-5 col-lg-4">
+        <div class="col-12 col-md-4 col-lg-3">
             <div class="input-group flex-nowrap">
                 <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
                 <input type="text" name="cari" class="form-control border-start-0" placeholder="Cari nama pelanggan..." value="{{ request('cari') }}">
             </div>
         </div>
-        <div class="col-8 col-md-4 col-lg-3">
+        <div class="col-6 col-md-3 col-lg-2">
             <select name="status" class="form-select" onchange="this.form.submit()">
                 <option value="">Semua Status</option>
                 <option value="baru" {{ request('status') === 'baru' ? 'selected' : '' }}>Baru</option>
@@ -28,7 +28,15 @@
                 <option value="selesai" {{ request('status') === 'selesai' ? 'selected' : '' }}>Selesai</option>
             </select>
         </div>
-        <div class="col-4 col-md-auto">
+        <div class="col-6 col-md-3 col-lg-3">
+            <select name="jenis" class="form-select" onchange="this.form.submit()">
+                <option value="">Semua Jenis</option>
+                @foreach (\App\Models\Komplain::JENIS as $kode => $label)
+                    <option value="{{ $kode }}" {{ request('jenis') === $kode ? 'selected' : '' }}>{{ $label }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-12 col-md-auto">
             <button class="btn btn-outline-secondary w-100">Cari</button>
         </div>
     </form>
@@ -47,6 +55,12 @@
                 </div>
                 <span class="badge rounded-pill bg-{{ $badgeColor[$komplain->status] ?? 'secondary' }}-subtle text-{{ $badgeColor[$komplain->status] ?? 'secondary' }} px-3 py-2 flex-shrink-0">
                     {{ ucfirst($komplain->status) }}
+                </span>
+            </div>
+
+            <div class="mb-2">
+                <span class="badge bg-secondary-subtle text-secondary px-3 py-2">
+                    <i class="bi bi-tag me-1"></i>{{ \App\Models\Komplain::JENIS[$komplain->jenis_masalah] ?? 'Lainnya' }}
                 </span>
             </div>
 
