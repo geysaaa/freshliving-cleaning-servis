@@ -56,6 +56,17 @@
                 <button class="btn btn-primary w-100 py-2 mt-2"><i class="bi bi-check-lg me-1"></i>Konfirmasi Metode Pembayaran</button>
             </form>
         </div>
+
+        {{-- Komplain pembayaran --}}
+        <div class="bg-white rounded-4 shadow-sm p-3 mt-3 d-flex justify-content-between align-items-center gap-3">
+            <div class="small">
+                <div class="fw-semibold">Ada masalah dengan pembayaran?</div>
+                <div class="text-muted">Misalnya tagihan tidak sesuai atau bukti transfer bermasalah.</div>
+            </div>
+            <a href="{{ route('komplain.create', ['pesanan' => $pesanan->id, 'jenis' => 'pembayaran']) }}" class="btn btn-outline-danger btn-sm text-nowrap">
+                <i class="bi bi-exclamation-triangle me-1"></i>Lapor Komplain
+            </a>
+        </div>
     </div>
 
     <style>
